@@ -54,6 +54,8 @@ applyrail drain --submit       # fills, reviews and submits
 
 The example applies the synthetic profile Jane Example to a fictional job on three local HTML forms built like Greenhouse, Lever, and Ashby application pages. It runs in `--dry` mode and submits nothing.
 
+This video runs the example and shows which files to change for a different job search: [Build a MatchLine-like product with ApplyRail](https://youtu.be/IyuOd2Pw5jw).
+
 ```
 git clone https://github.com/kyisaiah47/applyrail && cd applyrail
 npm install
