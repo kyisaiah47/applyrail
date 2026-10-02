@@ -46,7 +46,7 @@ export async function runExample({ useGemini = false, log = console.log } = {}) 
   const out = fs.mkdtempSync(path.join(os.tmpdir(), 'applyrail-example-'));
   const files = { resume: renderMaster(resume, out).pdf, coverLetter: null };
   const provider = useGemini ? createProvider({ provider: 'gemini', model: 'gemini-2.5-flash' }) : exampleStub();
-  log(`resume: ${files.resume}`);
+  log(`resume: ${path.basename(files.resume)}, rendered from resume.json in the plain ATS register`);
   log(`written answers: ${useGemini ? 'Gemini (gemini-2.5-flash)' : 'example stub (pass --gemini to use Gemini)'}`);
 
   const results = {};

@@ -1,6 +1,6 @@
 {
   "name": "applyrail",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Open-source job application agent. It harvests postings, queues them, fills employer ATS forms and reviews every form before it submits.",
   "type": "module",
   "bin": {
