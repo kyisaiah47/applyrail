@@ -1,30 +1,30 @@
 # ApplyRail
 
-ApplyRail is an open-source job application agent from [Compound Labs](https://thecompound.tech). It finds job postings, queues them, fills each employer's application form from your profile, and reviews every filled form before it submits. It submits only when the review passes.
+ApplyRail is an open-source job application agent from [Compound Labs](https://thecompound.tech). It finds job postings, queues them, fills each employer's application form from your profile, and reviews every filled form before submission. It submits a form only after the review passes.
 
-You run it on your own machine, with your own profile, your own resume and your own model.
+You run ApplyRail on your own machine with your own profile, resume, and model.
 
 ## What ApplyRail does
 
-- **Fills employer application forms.** The ATS drain opens each queued job on the employer's own applicant tracking system and fills the form: Greenhouse, Lever, Ashby, Workable, SmartRecruiters, Jobvite, BambooHR, Rippling, Recruitee, Teamtailor, Breezy and other careers pages. It works one employer at a time, so one company never sees two sessions from you at once.
-- **Reviews every form before it submits.** The presubmit review reads the finished form back from the page and checks it against your profile. It blocks a required field left empty, a value an autocomplete corrupted, a work authorization or sponsorship answer with the wrong polarity, a different city with the same first word, your resume in the cover letter slot, an email or a URL in the wrong box, an instruction inside a question that the answer does not follow, and a "why this company" answer that never names the company. A blocked field is filled again once or twice, and the form is reviewed again. A review that cannot run is a block.
-- **Has a `--dry` mode.** `--dry` fills and reviews every form and submits nothing. `--submit` is the only way anything is sent.
-- **Answers from your profile.** Every answer comes from your profile file, from your own list of answers, or from your model working only from your profile. A question the profile cannot answer is reported to you, never guessed. EEO questions are answered with your profile's words, and a decline matches whichever decline wording the form offers.
-- **Tailors your resume per job.** Your model selects and rewords bullets from your master resume and your fact bank, one composition per job. A validator rejects any change to employers, titles, dates or education, any number not in your sources, any skill not in your sources, and any sentence about something you have not done. A rejected composition falls back to your master resume. The PDF is written in a plain ATS register, so text extraction reads your name on line 1.
-- **Harvests postings.** Harvesters read company job boards (Greenhouse, Lever and Ashby public APIs), Y Combinator companies, work-from-anywhere boards (Remote OK and Working Nomads by default; Remotive, Himalayas and Jobicy when you turn them on), Dice, Indeed, ZipRecruiter and Wellfound. The Dice, Indeed, ZipRecruiter and Wellfound harvesters are off until you turn them on. Each harvester keeps only postings that apply on the employer's own site and queues the employer's URL.
+- **Fills employer application forms.** The ATS drain opens each queued job on the employer's applicant tracking system and fills the form. It supports Greenhouse, Lever, Ashby, Workable, SmartRecruiters, Jobvite, BambooHR, Rippling, Recruitee, Teamtailor, Breezy, and other careers pages. It handles one employer at a time, so one company never sees two sessions from you at once.
+- **Reviews every form before it submits.** The presubmit review reads the completed form from the page and checks it against your profile. It blocks an empty required field, a corrupted autocomplete value, a work authorization or sponsorship answer with the wrong polarity, a different city with the same first word, your resume in the cover letter slot, an email or URL in the wrong box, an instruction inside a question that the answer does not follow, or a "why this company" answer that never names the company. It fills a blocked field again once or twice and reviews the form again. If the review cannot run, it blocks the form.
+- **Has a `--dry` mode.** `--dry` fills and reviews every form without submitting anything. `--submit` is the only mode that sends an application.
+- **Answers from your profile.** Each answer comes from your profile file, your list of answers, or your model working only from your profile. ApplyRail reports a question that the profile cannot answer instead of guessing. EEO questions use your profile's words, and a decline uses whichever decline wording the form offers.
+- **Tailors your resume per job.** Your model selects and rewords bullets from your master resume and fact bank for one composition per job. A validator rejects changes to employers, titles, dates, or education; numbers not in your sources; skills not in your sources; and sentences about things you have not done. A rejected composition falls back to your master resume. The PDF uses a plain ATS register, so text extraction reads your name on line 1.
+- **Harvests postings.** Harvesters read company job boards through Greenhouse, Lever, and Ashby public APIs; Y Combinator companies; work-from-anywhere boards; Dice; Indeed; ZipRecruiter; and Wellfound. Remote OK and Working Nomads run by default. Remotive, Himalayas, Jobicy, Dice, Indeed, ZipRecruiter, and Wellfound run only when you turn them on. Each harvester keeps postings that apply on the employer's own site and queues the employer's URL.
 - **Includes LinkedIn as an opt-in harvester.** The LinkedIn harvester is off by default. When you turn it on, it reads job listings in your own browser, keeps the "Apply on company website" link, and routes the job to the employer's ATS. It never clicks Apply. ApplyRail has no LinkedIn Easy Apply.
-- **Keeps one queue.** Every posting records where it was found, its ATS URL, its state and its history. A job is never applied to twice.
-- **Offers optional board lanes.** Board lanes apply through a board's own flow (Indeed Apply, ZipRecruiter 1-Click, Wellfound, Dice Easy Apply, YC Work at a Startup) in your own signed-in browser. Every lane is off by default.
-- **Stops instead of bypassing.** A captcha that wants a person, a block page, a rate limit or a sign-in wall stops the run. The item is marked `stopped` with what was seen. ApplyRail never solves a captcha, never hides that it is automated, and never signs in for you. A form that carries an anti-automation question ("decode this string", "if you are an AI") is skipped and nothing on it is filled.
+- **Keeps one queue.** Each posting records where ApplyRail found it, its ATS URL, its state, and its history. ApplyRail never applies to a job twice.
+- **Offers optional board lanes.** Board lanes use a board's own flow: Indeed Apply, ZipRecruiter 1-Click, Wellfound, Dice Easy Apply, or YC Work at a Startup. They run in your own signed-in browser. Every lane is off by default.
+- **Stops instead of bypassing.** A captcha that requires a person, a block page, a rate limit, or a sign-in wall stops the run. ApplyRail marks the item `stopped` with what it saw. ApplyRail never solves a captcha, hides that it is automated, or signs in for you. ApplyRail skips a form with an anti-automation question such as "decode this string" or "if you are an AI" and fills nothing on it.
 - **Paces itself.** Delays between actions, delays between applications and daily caps per platform are all config values.
-- **Uses your model.** One provider interface covers OpenAI, Anthropic, Gemini, any OpenAI-compatible base URL (including a local model such as Ollama), and any command-line tool that reads a prompt on stdin.
-- **Scaffolds a dashboard.** `applyrail new-app <dir> --app console|simple|both` writes a Next.js app that reads your queue. Console is a dense working view. Simple is a roomier view with details behind disclosures. Both adds a welcome dialog and a view switch in the footer.
+- **Uses your model.** One provider interface supports OpenAI, Anthropic, Gemini, any OpenAI-compatible base URL including a local model such as Ollama, and any command-line tool that reads a prompt on stdin.
+- **Scaffolds a dashboard.** `applyrail new-app <dir> --app console|simple|both` writes a Next.js app that reads your queue. Console provides a dense working view. Simple provides a roomier view with details behind disclosures. Both adds a welcome dialog and a view switch in the footer.
 
 ## Who carries the risk
 
-The person who runs ApplyRail carries every risk to their own accounts. Job boards and applicant tracking systems publish terms that restrict automated access, and several prohibit automated applications outright. Their clauses are quoted below with the date each was fetched. Read them before you turn anything on. A board can limit, suspend or close your account, and an employer can reject an application it believes was automated.
+The person who runs ApplyRail carries every risk to their own accounts. Job boards and applicant tracking systems publish terms that restrict automated access, and several prohibit automated applications outright. The clauses below include the date when each was fetched. Read them before you turn anything on. A board can limit, suspend, or close your account, and an employer can reject an application it believes was automated.
 
-A captcha stops the run. ApplyRail does not solve, skip or work around it. The job is left as `stopped`, and you finish it yourself or move on.
+A captcha stops the run. ApplyRail does not solve, skip, or work around it. ApplyRail leaves the job as `stopped`, and you finish it yourself or move on.
 
 ## Install
 
@@ -33,7 +33,7 @@ npm install -g applyrail
 npm install -g puppeteer     # needed to fill live forms in a browser
 ```
 
-Node.js 20 or newer is required. `jsdom` is needed only for filling local HTML files.
+Node.js 20 or newer is required. `jsdom` is required only for filling local HTML files.
 
 ## Quick start
 
@@ -52,7 +52,7 @@ applyrail drain --submit       # fills, reviews and submits
 
 ## The worked example
 
-The example applies a synthetic profile, Jane Example, to a fictional job on three local HTML forms built like Greenhouse, Lever and Ashby application pages. It runs in `--dry` mode and submits nothing.
+The example applies the synthetic profile Jane Example to a fictional job on three local HTML forms built like Greenhouse, Lever, and Ashby application pages. It runs in `--dry` mode and submits nothing.
 
 ```
 git clone https://github.com/kyisaiah47/applyrail && cd applyrail
@@ -60,13 +60,13 @@ npm install
 npm run example
 ```
 
-It renders Jane's master resume to a PDF, fills all three forms, and prints every filled field and the review's verdict. Two questions on the Ashby form need written answers. By default an example stub writes them from Jane's facts and says so. `node examples/run-dry.mjs --gemini` asks Gemini instead and needs `GEMINI_API_KEY`.
+The example renders Jane's master resume to a PDF, fills all three forms, and prints every filled field and the review verdict. Two questions on the Ashby form need written answers. By default, an example stub writes those answers from Jane's facts and says so. `node examples/run-dry.mjs --gemini` asks Gemini instead and needs `GEMINI_API_KEY`.
 
-The files are in `examples/`: `jane-example/` holds the profile, the master resume, the fact bank, a job description and a config, and `fixtures/` holds the three forms. None of it is personal data.
+The files are in `examples/`. `jane-example/` holds the profile, master resume, fact bank, job description, and config. `fixtures/` holds the three forms. None of these files contains personal data.
 
 ## Configuration
 
-`applyrail.config.json` sits next to your profile. Paths are relative to it.
+`applyrail.config.json` sits next to your profile. Paths in the file are relative to it.
 
 | Key | What it sets |
 | --- | --- |
@@ -82,12 +82,12 @@ The files are in `examples/`: `jane-example/` holds the profile, the master resu
 
 ## The profile
 
-`profile.json` holds the facts forms ask for: name, email, phone, location, links, current role, years of experience, education, work authorization, sponsorship, relocation, salary expectation, notice period, consents and EEO answers. Two lists let you go further:
+`profile.json` holds the facts that forms ask for: name, email, phone, location, links, current role, years of experience, education, work authorization, sponsorship, relocation, salary expectation, notice period, consents, and EEO answers. Two lists let you add answers and facts:
 
-- `answers` is a list of `{ "match": "...", "answer": "..." }`. A match is text or a `/regex/`. Your answers are tried before any rule.
-- `facts` is a list of plain sentences about you. Your model may use them, and nothing else, for written answers.
+- `answers` is a list of `{ "match": "...", "answer": "..." }`. A match can be text or a `/regex/`. ApplyRail tries your answers before any rule.
+- `facts` is a list of plain sentences about you. Your model may use only those sentences for written answers.
 
-Work authorization questions are read for their polarity. "Do you require sponsorship?", "Are you authorized to work?" and "Are you authorized to work without sponsorship?" each get the answer your profile implies.
+ApplyRail reads the polarity of work authorization questions. It uses the answer implied by your profile for "Do you require sponsorship?", "Are you authorized to work?", and "Are you authorized to work without sponsorship?"
 
 ## Models
 
@@ -99,7 +99,7 @@ Work authorization questions are read for their polarity. "Do you require sponso
 { "model": { "provider": "command", "command": ["llm", "-m", "my-model"] } }
 ```
 
-Keys are read from `GEMINI_API_KEY`, `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`, or from the variable named in `apiKeyEnv`. Only the chosen provider's key is read. Without a model, ApplyRail still fills everything the profile answers, uses your master resume, and reports each written question as unanswered.
+ApplyRail reads keys from `GEMINI_API_KEY`, `OPENAI_API_KEY`, or `ANTHROPIC_API_KEY`, or from the variable named in `apiKeyEnv`. It reads only the chosen provider's key. Without a model, ApplyRail still fills everything answered by the profile, uses your master resume, and reports each written question as unanswered.
 
 ## Commands
 
@@ -135,11 +135,11 @@ Keys are read from `GEMINI_API_KEY`, `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`, or
 
 ## Board and ATS terms
 
-Each clause below was fetched on 2026-10-02 from the URL shown and is quoted exactly. Terms change. Check the current page before you run a harvester or a lane against a site.
+Each clause below was fetched on 2026-10-02 from the URL shown and quoted exactly. Terms change. Check the current page before you run a harvester or lane against a site.
 
 ### Indeed
 
-Source: https://www.indeed.com/legal. Date as printed: "Last Updated: September 29, 2026". Fetched on 2026-10-02.
+Source: https://www.indeed.com/legal. The page prints the date "Last Updated: September 29, 2026". ApplyRail fetched it on 2026-10-02.
 
 > Limits: To maintain the quality of the Site and reduce fraud and spam, Indeed in its sole discretion may impose limits on your use of the Site. This may include limiting – after notice on the Site – the number of daily job applications you can submit through Indeed. Further, you acknowledge that Indeed may require that users verify their email address or phone number to use the site or apply to jobs. Use of any automation, scripting, or bots to automate the Indeed Apply process outside of Indeed’s official vendors and tooling is prohibited.
 
@@ -155,11 +155,11 @@ Source: https://www.indeed.com/legal. Date as printed: "Last Updated: September 
 
 > a. General: If you are a user in the United States or Canada and are 18 years of age or older, Indeed may offer you the opportunity to activate our ‘Apply For Me’ tool. Activating this tool enables applications to be auto-submitted to Job Ads based on your Profile information and job preferences. You can disable ‘Apply For Me’ at any time, but doing so does not withdraw or reverse submitted applications. You understand your information may be shared as an application with any Employer, subject to our Privacy Policy when you use this tool.
 
-The Indeed harvester and the Indeed board lane are off by default. The board lane automates Indeed Apply, which the first clause above prohibits.
+The Indeed harvester and Indeed board lane are off by default. The board lane automates Indeed Apply, which the first clause above prohibits.
 
 ### LinkedIn User Agreement, section 8.2
 
-Source: https://www.linkedin.com/legal/user-agreement. Date as printed: "Effective on November 3, 2025". Fetched on 2026-10-02.
+Source: https://www.linkedin.com/legal/user-agreement. The page prints the date "Effective on November 3, 2025". ApplyRail fetched it on 2026-10-02.
 
 > Develop, support or use software, devices, scripts, robots or any other means or processes (such as crawlers, browser plugins and add-ons or any other technology) to scrape or copy the Services, including profiles and other data from the Services;
 
@@ -171,7 +171,7 @@ The LinkedIn harvester is off by default and runs only when harvest.linkedin.ena
 
 ### ZipRecruiter Terms of Use
 
-Source: https://www.ziprecruiter.global/en/terms (https://www.ziprecruiter.com/terms redirects there). Date as printed: "Effective Date: August 11, 2026". Fetched on 2026-10-02.
+Source: https://www.ziprecruiter.global/en/terms (https://www.ziprecruiter.com/terms redirects there). The page prints the date "Effective Date: August 11, 2026". ApplyRail fetched it on 2026-10-02.
 
 > “crawling” or "scraping", whether by automated, manual, or other non-automated means, or otherwise using any automated means (including, without limitation, “bots,” “scrapers,” and “spiders”), to view, access or collect information or content from the Services, or using any part of the Services or content to train a machine learning or AI model or otherwise ingesting content or any portion of the Services into a machine learning or AI model;
 
@@ -181,11 +181,11 @@ Source: https://www.ziprecruiter.global/en/terms (https://www.ziprecruiter.com/t
 
 > bypassing the measures we may use to prevent or restrict access to the Services, including without limitation, features that prevent or restrict use or copying of any content or enforce limitations on use of the Services or the content therein;
 
-These quotes are from the terms for users outside the EEA, Switzerland and the UK. The ZipRecruiter harvester and board lane are off by default.
+These quotes come from terms for users outside the EEA, Switzerland, and the UK. The ZipRecruiter harvester and board lane are off by default.
 
 ### Workday website terms
 
-Source: https://www.workday.com/en-us/legal/site-terms.html. Date as printed: "Last Updated: 08/13/2026". Fetched on 2026-10-02.
+The source is https://www.workday.com/en-us/legal/site-terms.html. The date printed is "Last Updated: 08/13/2026". ApplyRail fetched it on 2026-10-02.
 
 > These Terms of Service (“Terms”) apply to your access to and use of (a) the website located at www.workday.com and all associated web pages, websites and corresponding social media pages, (b) any web pages, websites, corresponding social media pages, materials, or other documents (including all content therein) that directly reference these Terms, (c) the Community (as defined below), and (d) the Workday APIs (as defined below) ((a)-(d) collectively, the “Sites”) provided by Workday, Inc., its subsidiaries and affiliates (each “Workday”, “we”, “us” or “our”).
 
@@ -195,19 +195,19 @@ Source: https://www.workday.com/en-us/legal/site-terms.html. Date as printed: "L
 
 > Bypass or ignore instructions contained in our robots.txt file; or
 
-An employer's Workday career site is a separate tenant. The tenant checked on 2026-10-02 linked only to the employer's applicant privacy policy, not to these terms. ApplyRail fills a Workday form only when you are already signed in to that employer's tenant in your own browser, and it tries each job once.
+An employer's Workday career site uses a separate tenant. The tenant checked on 2026-10-02 linked only to the employer's applicant privacy policy, not to these terms. ApplyRail fills a Workday form only when you are already signed in to that employer's tenant in your own browser. ApplyRail tries each job once.
 
 ### Greenhouse (MyGreenhouse User Agreement)
 
-Source: https://my.greenhouse.io/users/agreement. Date as printed: "Effective Date: January 29, 2025". Fetched on 2026-10-02.
+The source is https://my.greenhouse.io/users/agreement. The date printed is "Effective Date: January 29, 2025". ApplyRail fetched it on 2026-10-02.
 
 > Your Account. You agree to: (a) comply with all applicable laws, including, without limitation, privacy laws, intellectual property laws, export control laws, and regulatory requirements; and (b) provide accurate information (including contact information) within your account and keep it updated. You agree that you will not (and will not assist any third party to): (s) misrepresent your identity or create an account for anyone other than yourself; (t) attempt to use another person’s account; (u) provide content or information that violates the law or anyone’s rights; (v) override any security features or bypass or circumvent any access controls or use limits of the Services; (w) access or use the Services for purposes of developing or offering competitive products or services; (x) reverse engineer, decompile, disassemble, decipher or otherwise attempts to derive the source code for the Services or any related technology; (y) rent, lease, loan, trade, sell/re-sell or otherwise monetize the Services or related data or access to the same; or (z) use automated means, including spiders, robots, crawlers, or similar means or processes to access or use the Services. You are responsible for anything that occurs through your account unless you close your account or report misuse.
 
-This agreement covers the MyGreenhouse candidate service. No candidate terms were found for applying on an employer's job-boards.greenhouse.io page. Also checked: https://www.greenhouse.com/legal and https://www.greenhouse.com/privacy-policy.
+This agreement covers the MyGreenhouse candidate service. No candidate terms were found for applying on an employer's job-boards.greenhouse.io page. ApplyRail also checked https://www.greenhouse.com/legal and https://www.greenhouse.com/privacy-policy.
 
 ### Dice Terms and Conditions
 
-Source: https://www.dice.com/about/terms-and-conditions. Date as printed: "LAST UPDATED: 12/03/2025". Fetched on 2026-10-02.
+The source is https://www.dice.com/about/terms-and-conditions. The date printed is "LAST UPDATED: 12/03/2025". ApplyRail fetched it on 2026-10-02.
 
 > 8.2 While using the Site or Site-related services, you agree not to do any of the following without our prior written authorization:
 
@@ -221,17 +221,17 @@ The Dice harvester and the Dice board lane are off by default.
 
 ### Wellfound
 
-Source: https://wellfound.com/terms. Date as printed: "These General Terms were last updated on June 5, 2020.". Fetched on 2026-10-02.
+The source is https://wellfound.com/terms. The date printed is "These General Terms were last updated on June 5, 2020.". ApplyRail fetched it on 2026-10-02.
 
 > copy, disclose or distribute Content except as expressly permitted by the Terms (including through the use of automated or non-automated harvesting, collection or “scraping”) or otherwise use the Site or Services for competitive purposes;
 
 > use any automated system (including a spider, robot, or offline reader) to access the Site or Services in a manner that takes more bandwidth or produces greater load on Wellfound's network or servers than a human can reasonably produce in the same period of time by using a conventional on-line web browser (except Wellfound grants public search engines revocable permission to copy materials from the publicly available searchable indices of the materials, excluding any caches or archives of such materials);
 
-The Wellfound harvester and board lane are off by default.
+The Wellfound harvester and the Wellfound board lane are off by default.
 
-### Y Combinator (Work at a Startup links to these terms)
+### Y Combinator provides the terms linked by Work at a Startup.
 
-Source: https://www.ycombinator.com/legal. Date as printed: "Last Updated September 2026 (printed under the Privacy Policy heading; the Terms of Use section prints no date)". Fetched on 2026-10-02.
+The source is https://www.ycombinator.com/legal. The date printed is "Last Updated September 2026 (printed under the Privacy Policy heading; the Terms of Use section prints no date)". ApplyRail fetched it on 2026-10-02.
 
 > In connection with your use of the Site you will not engage in or use any data mining, robots, scraping or similar data gathering or extraction methods. If you are blocked by Y Combinator from accessing the Site (including by blocking your IP address), you agree not to implement any measures to circumvent such blocking (e.g., by masking your IP address or using a proxy IP address).
 
@@ -251,7 +251,7 @@ Source: https://remotive.com/terms-of-use and https://remotive.com/remote-jobs/a
 
 > Please note that there is absolutely no need to request Remotive Job data too frequently. Typically, you only need to GET Remotive job data through this API a couple of times a day (we advise max. 4 times a day). Our data is not changing much faster than that anyway. Note that excessive requests (more than 2x per minute) will be blocked.
 
-Remotive is off by default. Finding the employer link means opening a remotive.com page, which the site terms restrict. When you turn it on, ApplyRail polls the API at most once every 6 hours, waits 30 seconds between page requests, and keeps the Remotive URL as the source.
+Remotive is off by default. Finding the employer link requires opening a remotive.com page, which the site terms restrict. When you turn it on, ApplyRail polls the API at most once every 6 hours, waits 30 seconds between page requests, and keeps the Remotive URL as the source.
 
 ### Remote OK
 
@@ -261,7 +261,7 @@ Source: https://remoteok.com/api and https://remoteok.com/legal. Date as printed
 
 > You agree to link back with a web hyperlink or in-app hyperlink to our site on the page or app screen where you use the data from our APIs or site.
 
-Remote OK is on by default. ApplyRail keeps the Remote OK URL as each posting's source, and the dashboard links to it.
+Remote OK is on by default. ApplyRail keeps the Remote OK URL as each posting's source. The dashboard links to that URL.
 
 ### Himalayas
 
@@ -293,25 +293,25 @@ Jobicy is off by default. When you turn it on, ApplyRail polls the API at most o
 
 ### We Work Remotely
 
-Source: https://weworkremotely.com/api-terms-and-guidelines. Date as printed: "no date printed". Fetched on 2026-10-02.
+The source is https://weworkremotely.com/api-terms-and-guidelines. The date printed is "no date printed". ApplyRail fetched it on 2026-10-02.
 
 > By using the API, we require you to not bypass the We Work Remotely interface when applying for a job. You are welcome to pull in job details like company name, logo and description, but applying must be routed through the weworkremotely.com website. Any violations of this will be shut down.
 
 > The only We Work Remotely data you may use in your product or application is that which is exposed via our API. Scraping, copying, saving, or storing our data is strictly prohibited and against our Terms of Service.
 
-ApplyRail does not read We Work Remotely, because these terms require applying through weworkremotely.com.
+ApplyRail does not read We Work Remotely because these terms require applying through weworkremotely.com.
 
 ### Lever
 
-No candidate-facing clause about automated access was found on 2026-10-02. The published terms are contracts with business customers. Checked: https://www.lever.co/legal, https://www.lever.co/legal/terms-of-service ("Last updated August 25, 2023"), https://www.employinc.com/terms-of-service/ ("These Terms of Service were last updated February 19, 2025.") and the footer of a jobs.lever.co board.
+ApplyRail found no candidate-facing clause about automated access on 2026-10-02. The published terms are contracts with business customers. ApplyRail checked https://www.lever.co/legal, https://www.lever.co/legal/terms-of-service ("Last updated August 25, 2023"), https://www.employinc.com/terms-of-service/ ("These Terms of Service were last updated February 19, 2025.") and the footer of a jobs.lever.co board.
 
 ### Ashby
 
-No candidate-facing clause about automated access was found on 2026-10-02. The published terms are a contract with business customers. Checked: https://www.ashbyhq.com/resources/terms ("Last updated September 29, 2025"), https://www.ashbyhq.com/resources/privacy ("Last updated September 24, 2025") and the footer of a jobs.ashbyhq.com board.
+ApplyRail found no candidate-facing clause about automated access on 2026-10-02. The published terms are a contract with business customers. ApplyRail checked https://www.ashbyhq.com/resources/terms ("Last updated September 29, 2025"), https://www.ashbyhq.com/resources/privacy ("Last updated September 24, 2025") and the footer of a jobs.ashbyhq.com board.
 
 ### Working Nomads
 
-No clause about automated access was found on 2026-10-02 at https://www.workingnomads.com/terms-and-conditions ("Last updated: 11 March 2025"). Its public API at https://www.workingnomads.com/api/exposed_jobs/ carries no notice. Working Nomads is on by default.
+ApplyRail found no clause about automated access on 2026-10-02 at https://www.workingnomads.com/terms-and-conditions ("Last updated: 11 March 2025"). Its public API is at https://www.workingnomads.com/api/exposed_jobs/ and carries no notice. Working Nomads is on by default.
 
 ## Development
 
@@ -322,9 +322,9 @@ npm run example
 APPLYRAIL_SCRUB_KEY=... node scripts/scrub-gate.mjs
 ```
 
-One test calls the free Gemini API, and only when `GEMINI_API_KEY` is set. No test reads `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`.
+One test calls the free Gemini API only when `GEMINI_API_KEY` is set. No test reads `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`.
 
-The scrub gate runs in CI and fails closed. It refuses personal email addresses, machine paths, account and project ids, key-shaped strings, stealth plugins, services that solve captchas, and webdriver overrides. It also refuses the maintainers' personal data through keyed digests, so the repo never holds the data itself. That check needs a key only the maintainers hold, so on a pull request from a fork the scrub job fails until a maintainer runs it.
+The scrub gate runs in CI and fails closed. It refuses personal email addresses, machine paths, account and project ids, key-shaped strings, stealth plugins, services that solve captchas, and webdriver overrides. It also refuses the maintainers' personal data through keyed digests, so the repo never holds the data itself. That check needs a key only the maintainers hold. On a pull request from a fork, the scrub job fails until a maintainer runs it.
 
 ## License
 
