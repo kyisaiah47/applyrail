@@ -1,0 +1,41 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install pdftotext
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+      # Ubuntu blocks the unprivileged user namespaces Chrome's sandbox uses; allow them for the browser test.
+      - name: Allow Chrome's sandbox
+        run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
+      - run: npm ci
+      - run: npm test
+      - name: Worked example (fills three fixtures in --dry mode)
+        run: npm run example
+
+  scrub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Fails closed. The personal-data check needs the maintainers' key; without it the gate fails.
+      - name: Scrub gate
+        env:
+          APPLYRAIL_SCRUB_KEY: ${{ secrets.APPLYRAIL_SCRUB_KEY }}
+        run: node scripts/scrub-gate.mjs

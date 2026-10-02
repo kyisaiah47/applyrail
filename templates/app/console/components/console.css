@@ -1,0 +1,28 @@
+.console { display: grid; grid-template-columns: 240px minmax(0, 1fr) 360px; min-height: calc(100vh - 120px); }
+.console-states { border-right: 1px solid var(--rule); padding: 12px 0; display: flex; flex-direction: column; }
+.console-states button { display: flex; justify-content: space-between; gap: 12px; padding: 10px 20px; min-height: 44px; text-align: left; color: var(--ink-dim); font-size: 14px; }
+.console-states button:hover { color: var(--ink); background: var(--panel); }
+.console-states button[aria-pressed='true'] { color: var(--ink); background: var(--accent-wash); }
+.console-states .n { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); }
+.console-table { overflow: auto; }
+.console-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.console-table th { position: sticky; top: 0; background: var(--ground); text-align: left; font: 12px/1.6 var(--mono); color: var(--ink-faint); padding: 10px 14px; border-bottom: 1px solid var(--rule); }
+.console-table td { padding: 10px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.console-table tr { cursor: pointer; }
+.console-table tr:hover td { background: var(--panel); }
+.console-table tr[data-selected='true'] td { background: var(--accent-wash); }
+.console-table td button { text-align: left; }
+.mono { font-family: var(--mono); font-size: 12.5px; color: var(--ink-dim); }
+.console-detail { border-left: 1px solid var(--rule); padding: 20px; overflow: auto; display: grid; align-content: start; gap: 12px; }
+.console-detail h2 { font-size: 18px; line-height: 1.35; }
+.console-detail h3 { font-size: 13px; color: var(--ink-faint); font-family: var(--mono); margin: 8px 0 6px; }
+.console-detail .dim { color: var(--ink-dim); }
+.console-detail .reason { color: var(--ink-dim); font-size: 14px; }
+.console-detail dl { display: grid; gap: 8px; font-size: 13.5px; }
+.console-detail dl > div { display: grid; gap: 2px; }
+.console-detail dt { color: var(--ink-faint); font-size: 12px; }
+.console-detail dd { overflow-wrap: anywhere; }
+.console-detail a { text-decoration: underline; text-underline-offset: 3px; }
+.console-detail ul, .console-detail ol { padding-left: 18px; font-size: 13.5px; display: grid; gap: 6px; }
+.console-detail code { font-family: var(--mono); font-size: 12px; overflow-wrap: anywhere; }
+@media (max-width: 1100px) { .console { grid-template-columns: 1fr; } .console-states { flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--rule); } .console-detail { border-left: 0; border-top: 1px solid var(--rule); } }

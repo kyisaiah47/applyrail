@@ -1,0 +1,27 @@
+Senior Full-Stack Engineer
+
+Example Co (fictional), Remote, United States
+
+Example Co builds scheduling software for community clinics. We are hiring a Senior Full-Stack Engineer to work on the patient booking flow.
+
+What you will do:
+
+Build features across our React front end and Node.js services, end to end.
+
+Own a GraphQL API that the web app and the mobile app share.
+
+Improve PostgreSQL query performance on our busiest tables.
+
+Write Playwright tests and keep our CI fast.
+
+What we look for:
+
+6 or more years building web applications with TypeScript.
+
+Experience with React, Node.js and PostgreSQL.
+
+Experience running services in production, including on-call.
+
+Clear written communication. We are a remote team.
+
+Salary range: 150,000 to 180,000 USD.

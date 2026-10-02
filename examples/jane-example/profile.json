@@ -1,0 +1,60 @@
+{
+  "_note": "Synthetic profile. Jane Example is not a real person. Replace every value with your own.",
+  "firstName": "Jane",
+  "lastName": "Example",
+  "preferredName": "Jane",
+  "fullName": "Jane Example",
+  "email": "jane@example.com",
+  "phone": "+1 303 555 0142",
+  "location": "Denver, CO",
+  "city": "Denver",
+  "state": "Colorado",
+  "stateCode": "CO",
+  "country": "United States",
+  "postalCode": "80202",
+  "linkedin": "https://www.linkedin.com/in/jane-example",
+  "github": "https://github.com/jane-example",
+  "website": "https://jane.example.com",
+  "currentCompany": "Example Corp",
+  "currentTitle": "Senior Software Engineer",
+  "yearsExperience": 8,
+  "skillYears": { "TypeScript": 7, "React": 6, "Node.js": 7, "PostgreSQL": 5 },
+  "school": "Example State University",
+  "degree": "B.S. Computer Science",
+  "fieldOfStudy": "Computer Science",
+  "graduationYear": "2016",
+  "workAuthorized": true,
+  "requiresSponsorship": false,
+  "citizenship": "United States",
+  "over18": true,
+  "willingToRelocate": false,
+  "willingToTravel": "Up to 10 percent",
+  "remotePreference": "Remote",
+  "salaryExpectation": "165000",
+  "noticePeriod": "Two weeks",
+  "startDate": "Two weeks after an offer",
+  "howDidYouHear": "Company careers page",
+  "securityClearance": "None",
+  "eeo": {
+    "gender": "Decline to self-identify",
+    "hispanicLatino": "Decline to self-identify",
+    "race": "Decline to self-identify",
+    "veteran": "I don't wish to answer",
+    "disability": "I do not want to answer",
+    "pronouns": "she/her"
+  },
+  "consent": {
+    "privacyPolicy": true,
+    "dataRetention": true,
+    "textMessages": false
+  },
+  "answers": [
+    { "match": "favorite programming language", "answer": "TypeScript" }
+  ],
+  "facts": [
+    "Jane builds web applications with TypeScript, React and Node.js.",
+    "At Example Corp, Jane led the move of a billing service to PostgreSQL and cut p95 latency by 40 percent.",
+    "Jane mentors engineers and has run design reviews for a team of 12.",
+    "Jane wants a remote role on a product team that ships to customers every week."
+  ]
+}

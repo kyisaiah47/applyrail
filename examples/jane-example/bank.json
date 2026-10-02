@@ -1,0 +1,21 @@
+{
+  "_note": "The fact bank: approved facts the tailoring may draw on beyond the master resume. Every number here is true for Jane Example.",
+  "headlines": ["Senior Full-Stack Engineer", "Senior Frontend Engineer", "Senior Backend Engineer"],
+  "summaries": [
+    "Full-stack engineer with 8 years in TypeScript, React, Node.js and PostgreSQL, focused on product teams that ship weekly."
+  ],
+  "skills": ["GraphQL", "Terraform", "Kubernetes", "Jest", "Playwright", "CI/CD"],
+  "experience": {
+    "Example Corp": [
+      "Designed a GraphQL layer over 4 internal services so the web and mobile apps share one API.",
+      "Set up Playwright tests in CI that run on every pull request in under 9 minutes.",
+      "Moved the deploy pipeline to Terraform and Kubernetes, taking releases from weekly to daily."
+    ],
+    "Sample Labs": [
+      "Cut the API's cold start time from 3 seconds to under 1 second by caching config in Redis."
+    ],
+    "Demo Systems": [
+      "Wrote the first unit test suite for the admin tools with Jest."
+    ]
+  }
+}

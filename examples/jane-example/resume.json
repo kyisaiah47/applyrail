@@ -1,0 +1,56 @@
+{
+  "name": "Jane Example",
+  "headline": "Senior Software Engineer",
+  "contact": {
+    "email": "jane@example.com",
+    "phone": "+1 303 555 0142",
+    "location": "Denver, CO",
+    "links": ["https://jane.example.com", "https://github.com/jane-example"]
+  },
+  "summary": "Software engineer with 8 years of full-stack experience in TypeScript, React and Node.js. Ships customer-facing features weekly and owns services from design to on-call.",
+  "experience": [
+    {
+      "company": "Example Corp",
+      "title": "Senior Software Engineer",
+      "dates": "2021 to present",
+      "location": "Remote",
+      "bullets": [
+        "Led the move of the billing service to PostgreSQL, cutting p95 latency by 40 percent.",
+        "Built the customer dashboard in React and TypeScript, used by 2 million people a month.",
+        "Ran design reviews for a team of 12 engineers and wrote the service ownership guide."
+      ]
+    },
+    {
+      "company": "Sample Labs",
+      "title": "Software Engineer",
+      "dates": "2018 to 2021",
+      "location": "Denver, CO",
+      "bullets": [
+        "Wrote the Node.js API behind the mobile app and kept it at 99.9 percent uptime.",
+        "Added end-to-end tests that cut release rollbacks from 6 a quarter to 1."
+      ]
+    },
+    {
+      "company": "Demo Systems",
+      "title": "Junior Software Engineer",
+      "dates": "2016 to 2018",
+      "location": "Boulder, CO",
+      "bullets": [
+        "Maintained the internal admin tools in JavaScript and Python.",
+        "Moved nightly reports from cron scripts to a queue, saving 3 hours of manual work a week."
+      ]
+    }
+  ],
+  "skills": [
+    { "label": "Languages", "items": ["TypeScript", "JavaScript", "Python", "SQL"] },
+    { "label": "Frameworks", "items": ["React", "Node.js", "Next.js", "Express"] },
+    { "label": "Data and infrastructure", "items": ["PostgreSQL", "Redis", "Docker", "AWS"] }
+  ],
+  "projects": [
+    { "name": "trailmap", "link": "https://github.com/jane-example/trailmap", "description": "An open-source map of hiking trail closures, built with Next.js and PostGIS." }
+  ],
+  "education": [
+    { "school": "Example State University", "degree": "B.S. Computer Science", "dates": "2012 to 2016" }
+  ],
+  "awards": []
+}

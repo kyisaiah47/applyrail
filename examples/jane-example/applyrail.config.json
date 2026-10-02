@@ -1,0 +1,33 @@
+{
+  "profile": "profile.json",
+  "resume": "resume.json",
+  "bank": "bank.json",
+  "files": { "resume": null, "coverLetter": null },
+  "dataDir": ".applyrail",
+  "model": { "provider": "none" },
+  "screen": {
+    "titleDeny": ["intern", "internship", "sales", "recruiter", "marketing"],
+    "locations": ["remote", "united states", "denver"],
+    "minDescription": 200
+  },
+  "harvest": {
+    "companies": { "enabled": true, "companies": [] },
+    "yc": { "enabled": false, "limit": 50 },
+    "anywhere": { "enabled": true, "boards": ["remoteok", "workingnomads"] },
+    "dice": { "enabled": false },
+    "indeed": { "enabled": false },
+    "ziprecruiter": { "enabled": false },
+    "wellfound": { "enabled": false },
+    "linkedin": { "enabled": false }
+  },
+  "drain": { "width": 1, "tailor": true, "modelReview": false, "allowAccountHosts": false },
+  "pacing": { "maxApplicationsPerDay": 20, "betweenApplicationsMs": [30000, 90000] },
+  "boardLanes": {
+    "indeed": { "enabled": false },
+    "ziprecruiter": { "enabled": false },
+    "wellfound": { "enabled": false },
+    "dice": { "enabled": false },
+    "yc": { "enabled": false }
+  },
+  "browser": { "cdpUrl": null, "headless": true }
+}

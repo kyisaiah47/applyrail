@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Senior Full-Stack Engineer @ Example Co</title>
+<!-- Synthetic fixture. It models the structure of an Ashby application page: each question in a
+     div.ashby-application-form-field-entry with a label.ashby-application-form-question-title
+     whose class marks it required, system fields named _systemfield_*, a location combobox,
+     a Yes/No question answered with two buttons, a radio group in a fieldset, a required essay
+     and a consent checkbox. No employer data. -->
+<style>
+  body { font: 15px/1.5 sans-serif; margin: 40px; }
+  .ashby-application-form-field-entry { margin: 16px 0; }
+  ._yesno_ button { padding: 6px 14px; }
+  ._active_ { background: #222; color: #fff; }
+</style>
+</head>
+<body>
+<div class="ashby-job-posting-right-pane">
+  <h1>Senior Full-Stack Engineer</h1>
+  <div class="ashby-application-form-container">
+    <div class="ashby-application-form-field-entry">
+      <label class="ashby-application-form-question-title _required_1x" for="_systemfield_name">Name</label>
+      <input id="_systemfield_name" name="_systemfield_name" type="text" required>
+    </div>
+    <div class="ashby-application-form-field-entry">
+      <label class="ashby-application-form-question-title _required_1x" for="_systemfield_email">Email</label>
+      <input id="_systemfield_email" name="_systemfield_email" type="email" required>
+    </div>
+    <div class="ashby-application-form-field-entry">
+      <label class="ashby-application-form-question-title _required_1x" for="phone-q">Phone</label>
+      <input id="phone-q" name="2f0d0d0e-phone" type="tel" required>
+    </div>
+    <div class="ashby-application-form-field-entry">
+      <label class="ashby-application-form-question-title _required_1x" for="_systemfield_resume">Resume</label>
+      <input id="_systemfield_resume" name="_systemfield_resume" type="file" required>
+    </div>
+    <div class="ashby-application-form-field-entry">
+      <label class="ashby-application-form-question-title" for="linkedin-q">LinkedIn Profile</label>
+      <input id="linkedin-q" name="7a1b-linkedin" type="url">
+    </div>
+    <div class="ashby-application-form-field-entry">
+      <label class="ashby-application-form-question-title _required_1x" id="location-label" for="location-q">Location</label>
+      <div class="_container_loc">
+        <div class="_value_ " data-value-display></div>
+        <input id="location-q" role="combobox" aria-expanded="false" aria-labelledby="location-label" aria-controls="location-listbox" aria-required="true" type="text" placeholder="Start typing...">
+        <div id="location-listbox" role="listbox" hidden data-options='["Denver City, Texas, United States", "Denver, Colorado, United States"]'></div>
+      </div>
+    </div>
+    <div class="ashby-application-form-field-entry">
+      <label class="ashby-application-form-question-title _required_1x">Will you now or in the future require visa sponsorship to work in the United States?</label>
+      <div class="_yesno_">
+        <button type="button" class="_option_">Yes</button>
+        <button type="button" class="_option_">No</button>
+      </div>
+    </div>
+    <div class="ashby-application-form-field-entry">
+      <fieldset>
+        <legend class="ashby-application-form-question-title _required_1x">Which level best describes your experience?</legend>
+        <label><input type="radio" name="level" value="junior" required> Junior</label>
+        <label><input type="radio" name="level" value="mid" required> Mid-level</label>
+        <label><input type="radio" name="level" value="senior" required> Senior</label>
+        <label><input type="radio" name="level" value="staff" required> Staff or above</label>
+      </fieldset>
+    </div>
+    <div class="ashby-application-form-field-entry">
+      <label class="ashby-application-form-question-title _required_1x" for="why-q">Why do you want to work at Example Co?</label>
+      <textarea id="why-q" name="9c2e-why" rows="5" required maxlength="1200"></textarea>
+    </div>
+    <div class="ashby-application-form-field-entry">
+      <label><input id="consent-q" type="checkbox" required> I have read the Applicant Privacy Notice and agree to the processing of my data for this application.</label>
+    </div>
+    <button type="submit" class="ashby-application-form-submit-button">Submit Application</button>
+  </div>
+</div>
+<script>
+  // Yes/No buttons: the chosen one carries the _active_ class.
+  document.querySelectorAll('._yesno_').forEach(function (group) {
+    group.querySelectorAll('button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        group.querySelectorAll('button').forEach(function (x) { x.className = '_option_'; });
+        b.className = '_option_ _active_';
+      });
+    });
+  });
+  // Location combobox.
+  (function () {
+    var input = document.getElementById('location-q');
+    var lb = document.getElementById('location-listbox');
+    var all = JSON.parse(lb.getAttribute('data-options'));
+    var shown = input.parentNode.querySelector('[data-value-display]');
+    function render() {
+      var q = input.value.trim().toLowerCase();
+      lb.innerHTML = '';
+      all.filter(function (o) { return !q || o.toLowerCase().indexOf(q) >= 0; }).forEach(function (o, i) {
+        var d = document.createElement('div');
+        d.setAttribute('role', 'option');
+        d.id = 'loc-opt-' + i;
+        d.textContent = o;
+        d.addEventListener('click', function () { shown.textContent = o; input.value = ''; lb.hidden = true; });
+        lb.appendChild(d);
+      });
+    }
+    function open() { render(); lb.hidden = false; input.setAttribute('aria-expanded', 'true'); }
+    input.addEventListener('focus', open);
+    input.addEventListener('click', open);
+    input.addEventListener('input', open);
+    input.addEventListener('keydown', function (e) { if (e.key === 'Escape') { lb.hidden = true; } });
+  })();
+</script>
+</body>
+</html>
