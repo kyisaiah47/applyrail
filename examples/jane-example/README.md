@@ -20,7 +20,7 @@ The script is `node examples/run-dry.mjs examples/jane-example`. It fills three 
 
 ## The live product it relates to
 
-MatchLine (https://matchline.thecompound.tech) checks a resume against a job posting. It sells the tailored, ATS-formatted resume as a PDF. ApplyRail performs the same tailoring step with `applyrail tailor`. ApplyRail renders every resume in the same plain ATS register.
+MatchLine (https://matchline.thecompound.tech) checks a resume against a job posting. It sells the tailored, ATS-formatted resume as a PDF. MatchLine is a separate product and does not run on ApplyRail. ApplyRail performs the same tailoring step with `applyrail tailor`. ApplyRail renders every resume in the same plain ATS register.
 
 ## Make it yours
 
