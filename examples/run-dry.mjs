@@ -6,11 +6,13 @@
 //   node examples/run-dry.mjs            two questions need written answers; an example stub
 //                                        writes them from Jane's facts, and says so
 //   node examples/run-dry.mjs --gemini   use Gemini for those answers (needs GEMINI_API_KEY)
+//   node examples/run-dry.mjs examples/my-product
+//                                        run the same three forms with the profile, resume and
+//                                        job description in another directory
 //
-// It also renders Jane's master resume to a PDF in the plain ATS register and uses it as the
-// resume upload.
+// It also renders the master resume to a PDF in the plain ATS register and uses it as the
+// resume upload. The PDF and one JSON record per form are written to out/<directory name>/.
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { jsdomDriver } from '../src/formfill/drivers.js';
@@ -21,9 +23,11 @@ import { formatReview } from '../src/review/presubmit.js';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ex = (...p) => path.join(HERE, ...p);
-const profile = JSON.parse(fs.readFileSync(ex('jane-example', 'profile.json'), 'utf8'));
-const resume = JSON.parse(fs.readFileSync(ex('jane-example', 'resume.json'), 'utf8'));
-const jd = fs.readFileSync(ex('jane-example', 'job-description.txt'), 'utf8');
+const dirArg = process.argv.slice(2).find((a) => !a.startsWith('--'));
+const DIR = dirArg ? path.resolve(dirArg) : ex('jane-example');
+const profile = JSON.parse(fs.readFileSync(path.join(DIR, 'profile.json'), 'utf8'));
+const resume = JSON.parse(fs.readFileSync(path.join(DIR, 'resume.json'), 'utf8'));
+const jd = fs.readFileSync(path.join(DIR, 'job-description.txt'), 'utf8');
 
 /** An example stub for the two questions only a model can answer. It reads the prompt it is
  *  given and answers from Jane's facts and the job text, so the example runs with no key. */
@@ -42,10 +46,12 @@ export function exampleStub() {
   }));
 }
 
-export async function runExample({ useGemini = false, log = console.log } = {}) {
-  const out = fs.mkdtempSync(path.join(os.tmpdir(), 'applyrail-example-'));
+export async function runExample({ useGemini = false, log = console.log, outDir = path.join(HERE, '..', 'out', path.basename(DIR)) } = {}) {
+  const out = outDir;
+  fs.mkdirSync(out, { recursive: true });
   const files = { resume: renderMaster(resume, out).pdf, coverLetter: null };
   const provider = useGemini ? createProvider({ provider: 'gemini', model: 'gemini-2.5-flash' }) : exampleStub();
+  log(`profile: ${path.relative(process.cwd(), DIR) || '.'}`);
   log(`resume: ${path.basename(files.resume)}, rendered from resume.json in the plain ATS register`);
   log(`written answers: ${useGemini ? 'Gemini (gemini-2.5-flash)' : 'example stub (pass --gemini to use Gemini)'}`);
 
@@ -66,6 +72,7 @@ export async function runExample({ useGemini = false, log = console.log } = {}) 
         log(`  ${row.label.slice(0, 58).padEnd(58)} ${String(row.value).slice(0, 70)}`);
       }
       log(`  ${r.review ? formatReview(r.review) : r.reason}`);
+      fs.writeFileSync(path.join(out, `${name}.json`), `${JSON.stringify({ form: name, state: r.state, reason: r.reason || null, fields: (r.fill?.after || []).map((row) => ({ label: row.label, value: row.value })), review: r.review || null }, null, 2)}\n`);
       results[name] = r;
     } finally {
       await driver.close();
@@ -78,6 +85,6 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   runExample({ useGemini: process.argv.includes('--gemini') }).then((r) => {
     const bad = Object.entries(r).filter(([, v]) => v.state !== 'dry_filled');
     if (bad.length) { console.error(`\nnot clean: ${bad.map(([k, v]) => `${k} ${v.state}: ${v.reason}`).join('; ')}`); process.exitCode = 1; }
-    else console.log('\nAll three forms were filled and passed the review. Nothing was submitted.');
+    else console.log(`\nAll three forms were filled and passed the review. Nothing was submitted.\nThe resume PDF and one record per form are in ${path.relative(process.cwd(), path.join(HERE, '..', 'out', path.basename(DIR)))}/.`);
   });
 }

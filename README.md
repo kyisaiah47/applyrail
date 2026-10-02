@@ -64,6 +64,15 @@ The example renders Jane's master resume to a PDF, fills all three forms, and pr
 
 The files are in `examples/`. `jane-example/` holds the profile, master resume, fact bank, job description, and config. `fixtures/` holds the three forms. None of these files contains personal data.
 
+## Scaffold a dashboard
+
+```
+npx applyrail new-app my-site --app both     # or --app console, or --app simple
+cd my-site && npm install && npm run dev
+```
+
+ApplyRail writes a Next.js app that reads your queue.
+
 ## Configuration
 
 `applyrail.config.json` sits next to your profile. Paths in the file are relative to it.

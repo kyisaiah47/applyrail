@@ -28,7 +28,7 @@
   "scripts": {
     "test": "node --test \"test/*.test.js\"",
     "scrub": "node scripts/scrub-gate.mjs",
-    "example": "node examples/run-dry.mjs"
+    "example": "node examples/run-dry.mjs examples/jane-example"
   },
   "peerDependencies": {
     "jsdom": ">=24",
