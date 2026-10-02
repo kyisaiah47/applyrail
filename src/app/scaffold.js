@@ -107,7 +107,7 @@ export function scaffoldApp({ dir, app = 'both', name = null }) {
     name: name || path.basename(dir).toLowerCase().replace(/[^a-z0-9-]/g, '-'),
     private: true,
     scripts: { dev: 'next dev', build: 'next build', start: 'next start' },
-    dependencies: { next: '^15.5.0', react: '^19.1.0', 'react-dom': '^19.1.0' },
+    dependencies: { next: '^15.5.0', react: '^19.1.0', 'react-dom': '^19.1.0', 'server-only': '^0.0.1' },
     devDependencies: { typescript: '^5.6.0', '@types/react': '^19.1.0', '@types/node': '^22.0.0' },
   }, null, 2)}\n`);
   write('tsconfig.json', `${JSON.stringify({

@@ -24,3 +24,5 @@
 .sv-answer { padding: 4px 0 24px; color: var(--ink-dim); font: 16px/1.75 var(--sans); }
 .sv-answer > * + * { margin-top: 16px; }
 .sv-list { padding-left: 18px; display: grid; gap: 4px; }
+.sv-answer a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.sv-answer code { font-family: var(--mono); }

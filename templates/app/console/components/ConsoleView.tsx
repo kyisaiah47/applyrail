@@ -1,8 +1,8 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import type { Application } from '@/lib/applications';
-import { STATE_TEXT } from '@/lib/applications';
+import type { Application } from '@/lib/states';
+import { STATE_TEXT } from '@/lib/states';
 import './console.css';
 
 /* THE CONSOLE. Three columns edge to edge: the states on the left, every application in the

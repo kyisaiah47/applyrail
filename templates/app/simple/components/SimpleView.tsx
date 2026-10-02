@@ -1,7 +1,7 @@
 'use client';
 
-import type { Application } from '@/lib/applications';
-import { NEEDS_YOU, STATE_TEXT } from '@/lib/applications';
+import type { Application } from '@/lib/states';
+import { NEEDS_YOU, STATE_TEXT } from '@/lib/states';
 import Disclosure from './Disclosure';
 import './simple.css';
 
